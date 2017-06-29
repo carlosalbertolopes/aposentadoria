@@ -1,5 +1,9 @@
 /.externalToolBuilders
-.settings
+/.settings
 /target
 /.metadata
-/*.classpath
+/.classpath
+/.project
+/.idea
+/out
+/overlays
