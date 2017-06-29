@@ -1,0 +1,29 @@
+/* Fonte do body*/
+.ui-widget {
+	cursor: default !important;
+	font-size: 1.05em;
+}
+.indetificacao_sistema{
+	background: #CAE1FF;
+	padding: 20px;	
+}
+
+.corpo{
+	padding: 30px;
+	
+}
+.ui-outputlabel{
+	font-weight: bold; 	
+}
+p{
+	font-size: 1.2em;
+}
+
+#panelData{
+	margin-top: 20px;
+	float: left;
+	
+}
+.ui-rowgroup-header{
+	background: #CCC;
+}

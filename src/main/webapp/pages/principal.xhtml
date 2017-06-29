@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//pD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/pD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/default.xhtml">
+
+	<ui:define name="content">
+
+		<f:view contentType="text/html; charset=ISO-8859-1"
+			encoding="ISO-8859-1">
+			<h:form id="inicial" prependId="false">
+				<p:messages autoUpdate="true" />
+				<br />
+				<p>
+			Para complementar sua aposentadoria, João Pinheiro da Silva contratou um plano de previdência privada.
+			Nesse plano ele deve realizar duas contribuições distintas por mês em valores percentuais com base em seu salário.
+			
+			- A contribuição 'X' pode variar de 1 até 4% do valor do seu salário.
+			- A contribuição 'Y' pode variar de 0 até 8% do valor do seu salário, excedente a R$ 2.500,00.
+			
+			O salário inicial de João é de R$ 5.000,00 e é reajustado anualmente com percentual de 6,5%.
+			
+			Tendo essas informações iniciais, crie uma aplicação web que faça uma simulação dos valores acumulados ao longo do tempo.
+			
+			É importante salientar que para o uso dos benefícios oferecidos pelo plano de previdência, o tempo mínimo de contribuição é de 2 anos, e o tempo máximo de 35 
+			anos. </p>
+			<br />
+				<p:outputLabel for="valx"  value="Informe o valor da contribuição X" />
+				<p:selectOneRadio id="valx" value="#{previdenciaController.valorX}" >
+					<f:selectItems value="#{previdenciaController.listPorcentagemX}"
+								 var="p" itemLabel="#{p.key}" itemValue="#{p.value}" />
+				</p:selectOneRadio>
+				<p:outputLabel for="valy" value="Informe o valor da contribuição Y" />
+				<p:selectOneRadio id="valy" value="#{previdenciaController.valorY}" >
+					<f:selectItems value="#{previdenciaController.listPorcentagemY}"
+								 var="p" itemLabel="#{p.key}" itemValue="#{p.value}" />
+				</p:selectOneRadio><br />
+				<p:commandButton value="Simular" type="submit" 
+					actionListener="#{previdenciaController.montarListSimulacao()}" 
+					update="panelData" ajax="true"
+							 /><br />
+				<h:panelGroup id="panelData">
+				<p:dataTable var="contribuicao" rendered="#{not empty previdenciaController.pessoa.contribuicoes}"
+					value="#{previdenciaController.pessoa.contribuicoes}"
+					sortBy="#{contribuicao.ano}" expandableRowGroups="true" 
+					scrollable="true" scrollHeight="350"
+					>
+					<p:headerRow>
+						<f:facet name="header">
+				            Simulação #{previdenciaController.pessoa.nome}
+				        </f:facet>
+						<p:column colspan="5">
+							<h:outputText value="#{contribuicao.ano}" />
+						</p:column>
+					</p:headerRow>
+					<p:column headerText="Mês">
+						<h:outputText value="#{contribuicao.mes}" />
+					</p:column>
+					<p:column headerText="Salário">
+						<h:outputText value="#{contribuicao.salario}" >
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="X">
+						<h:outputText value="#{contribuicao.x}" >
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Y">
+						<h:outputText value="#{contribuicao.y}" >
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Valor para resgate">
+						<h:outputText value="Carência plano" rendered="#{contribuicao.acumuladoMes == null}" />
+						<h:outputText value="#{contribuicao.acumuladoMes}" rendered="#{contribuicao.acumuladoMes != null}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+					<p:summaryRow>
+						<p:column style="text-align:right">
+							<h:outputText value="Total #{contribuicao.ano}:" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{contribuicao.totalAnual}">
+								<f:convertNumber type="currency" currencySymbol="R$" />
+							</h:outputText>
+						</p:column>
+						<p:column style="text-align:right">
+								<h:outputText value="Total Final Plano:" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{previdenciaController.pessoa.valorFinalResgate}">
+									<f:convertNumber type="currency" currencySymbol="R$" />
+								</h:outputText>
+							</p:column>
+					</p:summaryRow>
+				</p:dataTable>
+				</h:panelGroup>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>
